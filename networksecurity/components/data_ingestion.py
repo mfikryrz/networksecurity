@@ -99,3 +99,66 @@ class DataIngestion:
 
         except Exception as e:
             raise NetworkSecurityException
+
+"""
+Saya akan jelaskan kegunaan dari code `data_ingestion.py` ini:
+
+## Fungsi Utama Data Ingestion
+
+Code ini adalah komponen untuk **mengambil dan mempersiapkan data** dalam sebuah pipeline machine learning untuk deteksi keamanan jaringan. Berikut penjelasan detailnya:
+
+### 1. **Export Data dari MongoDB** 
+```python
+def export_collection_as_dataframe(self):
+```
+- Mengambil data dari database MongoDB 
+- Mengkonversi collection MongoDB menjadi pandas DataFrame
+- Menghapus kolom `_id` (ID internal MongoDB)
+- Mengganti nilai "na" dengan `np.nan` untuk handling missing values
+
+### 2. **Simpan Data ke Feature Store**
+```python
+def export_data_into_feature_store(self, dataframe: pd.DataFrame):
+```
+- Menyimpan DataFrame ke file CSV sebagai "feature store"
+- Membuat folder jika belum ada
+- Feature store ini berfungsi sebagai tempat penyimpanan data yang sudah diproses
+
+### 3. **Split Data Training dan Testing**
+```python
+def split_data_as_train_test(self, dataframe: pd.DataFrame):
+```
+- Membagi data menjadi training set dan test set
+- Menggunakan ratio yang sudah dikonfigurasi (misalnya 80:20)
+- Menyimpan kedua set data ke file CSV terpisah
+
+### 4. **Orchestrator Method**
+```python
+def initiate_data_ingestion(self):
+```
+Method utama yang menjalankan seluruh proses:
+1. Ambil data dari MongoDB
+2. Simpan ke feature store
+3. Split menjadi train/test
+4. Return artifact yang berisi path ke file training dan testing
+
+## Alur Kerja
+
+```
+MongoDB → DataFrame → Feature Store (CSV) → Train/Test Split → Training & Testing Files
+```
+
+## Kegunaan dalam ML Pipeline
+
+Komponen ini biasanya adalah **langkah pertama** dalam pipeline machine learning:
+- **Input**: Database MongoDB dengan data jaringan
+- **Output**: File training dan testing yang siap digunakan untuk tahap selanjutnya (data validation, transformation, model training)
+
+Code ini menggunakan design pattern yang baik dengan:
+- Configuration management (DataIngestionConfig)
+- Artifact tracking (DataIngestionArtifact)
+- Error handling dengan custom exception
+- Logging untuk monitoring
+
+Ini memudahkan untuk maintain dan scale sistem ML di production.
+"""
