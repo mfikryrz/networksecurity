@@ -2,8 +2,8 @@ python-dotenv
 pandas
 numpy
 certifi
-# pymongo[srv]
-# pymongo
+pymongo[srv]
+pymongo
 scikit-learn
 mlflow
 pyaml
