@@ -35,35 +35,6 @@ The goal is to build a production-grade system that:
 
 ---
 
-## 🧱 Pipeline Architecture
-
-```mermaid
-graph TD
-  A[MongoDB Dataset] --> B[Data Ingestion]
-  B --> C[Data Validation]
-  C --> D[Data Transformation]
-  D --> E[Model Training]
-  E --> F[MLflow Tracking via DagsHub]
-  E --> G[Model Saving]
-  G --> H[S3 Sync]
-  G --> I[Final Model (Pickle)]
-
-  subgraph CI/CD [CI/CD Pipeline]
-    J[GitHub Actions] --> K[Build Docker Image]
-    K --> L[Push to ECR]
-    L --> M[Deploy to EC2 Instance]
-  end
-
-  subgraph API [FastAPI Service]
-    N["/train"] --> B
-    O["/predict"] --> P[Load Model & Preprocessor] --> Q[Return Prediction as Table]
-  end
-
-  H --> R[S3 Bucket]
-```
-
----
-
 ## 📁 Project Structure
 
 ```
